@@ -5,6 +5,7 @@
 body {
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: whitesmoke;
@@ -12,4 +13,11 @@ body {
 .canvas {
     border: 1px solid black;
     background-color: white;
+}
+.btn_start {
+    width: 170px;
+    height: 40px;
+    margin-top: 20px;
+    font-size: 20px;
+    cursor: pointer;
 }
