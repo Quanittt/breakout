@@ -4,6 +4,7 @@ const btn_start = document.getElementById("btn_start");
 
 let right = false;
 let left = false;
+let interval = 0;
 
 // Ball's position
 let x = canvas.width / 2;
@@ -11,11 +12,11 @@ let y = canvas.height - 40;
 let dx = 2;
 let dy = -2;
 
-// Paddle position
+// Paddle position & sizes
 const paddleHeight = 10;
 const paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
-let paddleY = canvas.height - paddleHeight;
+let paddleY = canvas.height - paddleHeight - 20;
 
 
 function drawPaddle() {
@@ -26,6 +27,7 @@ function drawPaddle() {
     ctx.closePath();
 }
 
+//Move the paddle
 document.addEventListener("keydown", keyIsPressed, false);
 
 function keyIsPressed(btn) {
@@ -62,9 +64,20 @@ function drawBall() {
     
     if (y + dy < 10) {
         dy = -dy;
-    }      
+    } 
+    if (y + dy > canvas.height - 10) {
+        if (x > paddleX && x < paddleX + paddleWidth && y - 30 < paddleY) {
+            dy = -dy;
+        } else {
+            // Game over
+            alert('Game over');
+            // document.location.reload();
+            clearInterval(interval); // Stop game with clearInterval()    
+        }
+    }
 }
 
+//Start game with button
 btn_start.addEventListener("click", () => {
-    setInterval(drawBall, 10);
+    interval = setInterval(drawBall, 10);
 });
