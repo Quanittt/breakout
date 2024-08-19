@@ -17,7 +17,12 @@ body {
 .btn_start {
     width: 170px;
     height: 40px;
-    margin-top: 20px;
     font-size: 20px;
     cursor: pointer;
+}
+.under_canvas {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
 }

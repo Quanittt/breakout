@@ -19,6 +19,8 @@ const paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let paddleY = canvas.height - paddleHeight;
 
+const scorePointer = document.getElementById('scorePointer');
+let scorePoint = 0;
 
 function drawPaddle() {
     ctx.beginPath();
@@ -45,8 +47,11 @@ function drawBricks() {
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 3; j++) {
             // Bricks position
-            const brickX = i * (50 + paddleWidth) + 20;
+            const brickX = i * (50 + paddleWidth) + 70;
             const brickY = j * (50 + paddleHeight) + 50;
+            
+            
+            
             if (bricks[i][j].status === 1) {
                 // Bricks drawing
                 ctx.beginPath();
@@ -66,9 +71,17 @@ function collisionWithBricks() {
             const brick = bricks[i][j];
 
             if (brick.status === 1) {
-                if (x > brick.x && x < brick.x + paddleWidth && y > brick.y && y < brick.y + paddleHeight) {
+                if (x > brick.x && x < brick.x + paddleWidth + 70 && y > brick.y && y < brick.y + paddleHeight) {
                     dy = -dy;
                     brick.status = 0;
+                    scorePoint++;
+                    scorePointer.innerHTML = `Score: ${scorePoint}`
+                    // If you won
+                    if (scorePoint == 12) {
+                        alert('You won!');
+                        document.location.reload();
+                        clearInterval(interval);
+                    }
                 }
             }
         }
@@ -108,6 +121,7 @@ function drawBall() {
     y += dy;
     x += dx;
     
+
     // ball's ricochet
     if (x + dx > canvas.width - 10 || x + dx < 10) {
         dx = -dx;
@@ -121,10 +135,10 @@ function drawBall() {
         if (x > paddleX && x < paddleX + paddleWidth && y - 30 < paddleY) {
             dy = -dy;
         } else {
-            // Game over
-            // alert('Game over');
-            // document.location.reload();
-            // clearInterval(interval); // Stop game with clearInterval()    
+            // If you lose
+            alert('Game over');
+            document.location.reload();
+            clearInterval(interval); // Stop game with clearInterval()    
             dy = -dy;
         }
     }
