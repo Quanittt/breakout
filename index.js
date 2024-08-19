@@ -1,6 +1,7 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const btn_start = document.getElementById("btn_start");
+const bricks = [];
 
 let right = false;
 let left = false;
@@ -16,7 +17,7 @@ let dy = -2;
 const paddleHeight = 10;
 const paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
-let paddleY = canvas.height - paddleHeight - 20;
+let paddleY = canvas.height - paddleHeight;
 
 
 function drawPaddle() {
@@ -25,6 +26,24 @@ function drawPaddle() {
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
+}
+
+// Bricks
+function drawBricks() {
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 3; j++) {
+            // Bricks position
+            const brickX = i * (50 + paddleWidth) + 20;
+            const brickY = j * (50 + paddleHeight) + 50;
+    
+            // Bricks drawing
+            ctx.beginPath();
+            ctx.rect(brickX, brickY, paddleWidth, paddleHeight);
+            ctx.fillStyle = "green";
+            ctx.fill();
+            ctx.closePath();
+        }
+    }
 }
 
 //Move the paddle
@@ -47,11 +66,12 @@ function drawBall() {
     // drawing a ball
     ctx.beginPath();
     ctx.arc(x, y, 10, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "red";
     ctx.fill();
     ctx.closePath();
 
-    drawPaddle()
+    drawPaddle();
+    drawBricks();
     
     //change ball's pos
     y += dy;
@@ -77,7 +97,7 @@ function drawBall() {
     }
 }
 
-//Start game with button
+// Start game with button
 btn_start.addEventListener("click", () => {
     interval = setInterval(drawBall, 10);
 });
