@@ -28,6 +28,18 @@ function drawPaddle() {
     ctx.closePath();
 }
 
+function initialBricks() {
+    for (let i = 0; i < 4; i++) {
+        bricks[i] = [];
+        for (let j = 0; j < 3; j++) {
+            // Bricks position
+            const brickX = i * (50 + paddleWidth) + 20;
+            const brickY = j * (50 + paddleHeight) + 50;
+            bricks[i][j] = { x: brickX, y: brickY, status: 1 };
+        }
+    }
+}
+
 // Bricks
 function drawBricks() {
     for (let i = 0; i < 4; i++) {
@@ -35,16 +47,34 @@ function drawBricks() {
             // Bricks position
             const brickX = i * (50 + paddleWidth) + 20;
             const brickY = j * (50 + paddleHeight) + 50;
-    
-            // Bricks drawing
-            ctx.beginPath();
-            ctx.rect(brickX, brickY, paddleWidth, paddleHeight);
-            ctx.fillStyle = "green";
-            ctx.fill();
-            ctx.closePath();
+            if (bricks[i][j].status === 1) {
+                // Bricks drawing
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, paddleWidth, paddleHeight);
+                ctx.fillStyle = "green";
+                ctx.fill();
+                ctx.closePath();
+            }
         }
     }
 }
+
+// Collision with bricks
+function collisionWithBricks() {
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 3; j++) {
+            const brick = bricks[i][j];
+
+            if (brick.status === 1) {
+                if (x > brick.x && x < brick.x + paddleWidth && y > brick.y && y < brick.y + paddleHeight) {
+                    dy = -dy;
+                    brick.status = 0;
+                }
+            }
+        }
+    }
+}
+
 
 //Move the paddle
 document.addEventListener("keydown", keyIsPressed, false);
@@ -72,6 +102,7 @@ function drawBall() {
 
     drawPaddle();
     drawBricks();
+    collisionWithBricks();
     
     //change ball's pos
     y += dy;
@@ -85,19 +116,25 @@ function drawBall() {
     if (y + dy < 10) {
         dy = -dy;
     } 
+    
     if (y + dy > canvas.height - 10) {
         if (x > paddleX && x < paddleX + paddleWidth && y - 30 < paddleY) {
             dy = -dy;
         } else {
             // Game over
-            alert('Game over');
+            // alert('Game over');
             // document.location.reload();
-            clearInterval(interval); // Stop game with clearInterval()    
+            // clearInterval(interval); // Stop game with clearInterval()    
+            dy = -dy;
         }
     }
 }
 
 // Start game with button
 btn_start.addEventListener("click", () => {
+    initialBricks()
     interval = setInterval(drawBall, 10);
+    console.log(bricks);
 });
+
+
